@@ -26,5 +26,9 @@ def load_words(MIN_WORD_LENGTH):
 
 def load_benchmark():
     file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../results/benachmark.txt"))
-    with open(file_path, "r", encoding="utf-8") as f:
-        return f.read()
+
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            return int(f.read())
+    except FileNotFoundError:
+        return None
