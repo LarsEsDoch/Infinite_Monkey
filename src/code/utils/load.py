@@ -1,13 +1,13 @@
 import os
 
 def load_text():
-    file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../results/output.txt"))
+    file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../results/output.txt"))
     with open(file_path, "r", encoding="utf-8") as f:
         return f.read()
 
 def load_words(MIN_WORD_LENGTH):
     english_words = set()
-    file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../words/words.txt"))
+    file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../words/words.txt"))
     with open(file_path, "r", encoding="utf-8") as f:
         for zeile in f:
             word = zeile.strip().lower()
@@ -15,7 +15,7 @@ def load_words(MIN_WORD_LENGTH):
                 english_words.add(word)
 
     german_words = set()
-    file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../words/wortliste.txt"))
+    file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../words/wortliste.txt"))
     with open(file_path, "r", encoding="utf-8") as f:
         for zeile in f:
             word = zeile.strip().lower()
@@ -25,10 +25,15 @@ def load_words(MIN_WORD_LENGTH):
     return english_words, german_words
 
 def load_benchmark():
-    file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../results/benachmark.txt"))
+    file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../results/benchmark.txt"))
 
     try:
         with open(file_path, "r", encoding="utf-8") as f:
-            return int(f.read())
+            content = f.read()
+            best_length, best_length_search = content.split(",")
+
+            best_length = int(best_length)
+            best_length_search = int(best_length_search)
+            return best_length, best_length_search
     except FileNotFoundError:
         return None
