@@ -1,20 +1,21 @@
-from src.code.benchmark import benchmark
-from src.code.decide_words import decide_words
-from src.code.generate import generate_random_text
-from src.code.load import load_benchmark, load_text
-from src.code.search import search_english_german, search_custom_words
-from src.code.save import save_text, save_founds
+from src.code.tools.benchmark import benchmark
+from src.code.interface.decide_words import decide_words
+from src.code.tools.generate import generate_random_text
+from src.code.utils.load import load_benchmark, load_text
+from src.code.tools.search import search_english_german, search_custom_words
+from src.code.utils.save import save_text, save_founds
 
-MAX_LENGTH = 100000000
+MAX_LENGTH = 10000000
 BLOCKSIZE = 100
-MIN_WORD_LENGTH = 4
-BENCHMARK_LIMIT_SECONDS = 10
+MIN_WORD_LENGTH = 1
+BENCHMARK_LIMIT_SECONDS = 15
+BENCHMARK_LIMIT_SECONDS_SEARCH = 30
 BENCHMARK_SIZES = [10000, 25000, 50000, 100000, 250000, 500000, 1000000, 2500000, 5000000, 10000000, 25000000, 50000000, 100000000]
 
 def full_process():
     print("Running full process...")
-    best_length = benchmark(BENCHMARK_SIZES, BENCHMARK_LIMIT_SECONDS)
-    custom_length = decide_words(best_length, MAX_LENGTH)
+    best_length, best_length_search = benchmark(BENCHMARK_SIZES, BENCHMARK_LIMIT_SECONDS, BENCHMARK_LIMIT_SECONDS_SEARCH, MIN_WORD_LENGTH)
+    custom_length = decide_words(best_length, best_length_search, MAX_LENGTH)
     text = generate_random_text(custom_length, BLOCKSIZE)
     english_found_words, german_found_words = search_english_german(MIN_WORD_LENGTH, text)
     save_text(text)
@@ -22,17 +23,18 @@ def full_process():
 
 def benchmark_mode():
     print("Running benchmark...")
-    benchmark(BENCHMARK_SIZES, BENCHMARK_LIMIT_SECONDS)
+    benchmark(BENCHMARK_SIZES, BENCHMARK_LIMIT_SECONDS, BENCHMARK_LIMIT_SECONDS_SEARCH, MIN_WORD_LENGTH)
 
 def generate_mode():
     print("Generating random text...")
-    custom_length = decide_words(load_benchmark(), MAX_LENGTH)
+    custom_length = decide_words(load_benchmark()[0], load_benchmark()[1], MAX_LENGTH)
     text = generate_random_text(custom_length, BLOCKSIZE)
     save_text(text)
 
 def search_mode():
-    print("Searching (English, German)...")
+    print("Loading text. This may take a while...")
     text = load_text()
+    print("Searching (English, German)...")
     english_found_words, german_found_words = search_english_german(MIN_WORD_LENGTH, text)
     save_founds(english_found_words, german_found_words)
 
