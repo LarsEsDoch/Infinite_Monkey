@@ -1,3 +1,4 @@
+from src.code.interface.settings import settings_menu
 from src.code.tools.benchmark import benchmark
 from src.code.interface.decide_words import decide_words
 from src.code.tools.generate import generate_random_text
@@ -11,6 +12,13 @@ MIN_WORD_LENGTH = 1
 BENCHMARK_LIMIT_SECONDS = 15
 BENCHMARK_LIMIT_SECONDS_SEARCH = 30
 BENCHMARK_SIZES = [10000, 25000, 50000, 100000, 250000, 500000, 1000000, 2500000, 5000000, 10000000, 25000000, 50000000, 100000000]
+
+def settings():
+    print("Entering settings menu...")
+    global MAX_LENGTH, BLOCKSIZE, MIN_WORD_LENGTH, BENCHMARK_LIMIT_SECONDS, BENCHMARK_LIMIT_SECONDS_SEARCH, BENCHMARK_SIZES
+    MAX_LENGTH, BLOCKSIZE, MIN_WORD_LENGTH, BENCHMARK_LIMIT_SECONDS, BENCHMARK_LIMIT_SECONDS_SEARCH, BENCHMARK_SIZES = settings_menu(
+        MAX_LENGTH, BLOCKSIZE, MIN_WORD_LENGTH, BENCHMARK_LIMIT_SECONDS, BENCHMARK_LIMIT_SECONDS_SEARCH, BENCHMARK_SIZES)
+
 
 def full_process():
     print("Running full process...")
