@@ -7,22 +7,23 @@ from tqdm import tqdm
 
 from src.code.utils.load import load_words
 from src.code.tools.search import find_words_in_text
+from src.code.utils.save import save_benchmark
 
 
-def benchmark(BENCHMARK_SIZES, BENCHMARK_LIMIT_SECONDS, BENCHMARK_LIMIT_SECONDS_SEARCH, MIN_WORD_LENGTH):
+def benchmark(benchmark_sizes, benchmark_limit_seconds, benchmark_limit_seconds_search, min_word_length):
     print("\n--- Benchmark: random text generation ---")
     print("This will take up to 5 minutes. Please wait...")
     best_length = None
     best_length_search = None
     best_length_search_found = False
-    english_words, german_words = load_words(MIN_WORD_LENGTH)
-    for character_count in BENCHMARK_SIZES:
+    english_words, german_words = load_words(min_word_length)
+    for character_count in benchmark_sizes:
         start = time.time()
         chars = [random.choice(string.ascii_lowercase + '., ') for _ in tqdm(range(character_count), desc="Generating")]
         text = ''.join(chars)
         duration = time.time() - start
         print(f"{f'{character_count:,}'.replace(',', '.'):>12} characters generated in {duration:.3f} seconds\n")
-        if duration <= BENCHMARK_LIMIT_SECONDS:
+        if duration <= benchmark_limit_seconds:
             best_length = character_count
         else:
             break
@@ -35,11 +36,11 @@ def benchmark(BENCHMARK_SIZES, BENCHMARK_LIMIT_SECONDS, BENCHMARK_LIMIT_SECONDS_
                 "En": english_words,
                 "Ge": german_words
             }
-            words = find_words_in_text(text, MIN_WORD_LENGTH, word_sets, 10)
+            words = find_words_in_text(text, min_word_length, word_sets, 10)
             duration_search = time.time() - start_search
             print(
                 f"{f'{len(words["En"]) + len(words["Ge"]):,}'.replace(',', '.'):>12} words found searched in {duration_search:.3f} seconds\n")
-        if duration_search <= BENCHMARK_LIMIT_SECONDS_SEARCH:
+        if duration_search <= benchmark_limit_seconds_search:
             best_length_search = character_count
         else:
             best_length_search_found = True
@@ -54,8 +55,6 @@ def benchmark(BENCHMARK_SIZES, BENCHMARK_LIMIT_SECONDS, BENCHMARK_LIMIT_SECONDS_
     print(f"\n✅ Best text length: {f'{best_length:,}'.replace(',', '.')} characters")
     print(f"✅ Best text length for searching: {f'{best_length_search:,}'.replace(',', '.')} characters")
 
-    file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../results/benchmark.txt"))
-    with open(file_path, "w", encoding="utf-8") as f:
-        f.write(str(best_length) + "," + str(best_length_search))
+    save_benchmark(best_length, best_length_search)
     return best_length, best_length_search
 

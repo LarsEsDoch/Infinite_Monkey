@@ -59,6 +59,7 @@ def invalid_option():
     print("Invalid option selected!")
 
 menu_options = {
+    "0": settings,
     "1": full_process,
     "2": benchmark_mode,
     "3": generate_mode,
@@ -70,6 +71,7 @@ menu_options = {
 def main():
     while True:
         print("\n--- Decide process mode ---")
+        print("0. Settings")
         print("1. Full process")
         print("2. Benchmark")
         print("3. Generate")
