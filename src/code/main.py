@@ -36,8 +36,7 @@ def benchmark_mode():
 def generate_mode():
     print("Generating random text...")
     custom_length = decide_words(load_benchmark()[0], load_benchmark()[1], MAX_LENGTH)
-    text = generate_random_text(custom_length, BLOCKSIZE)
-    save_text(text)
+    generate_random_text(custom_length, BLOCKSIZE)
 
 def search_mode():
     print("Loading text. This may take a while...")
