@@ -14,8 +14,8 @@ def decide_words(best_length, best_length_search, words):
         return words
     else:
         print("Do you want to accept the recommended length for generating (g) or searching (s)? If not, it may take longer to get results.")
-        print(f"Recommended length for generating: {best_length}")
-        print(f"Recommended length for searching: {best_length_search}")
+        print(f"Recommended length for generating: {f'{best_length:,}'.replace(',', '.'):>12}")
+        print(f"Recommended length for searching: {f'{best_length_search:,}'.replace(',', '.'):>12}")
         print("Or you can enter a custom length. (c)")
         print("Else you use the default length. (n)")
         decision = input("Accept recommended length? (g/s/c/n): ")

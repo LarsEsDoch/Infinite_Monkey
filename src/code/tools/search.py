@@ -61,7 +61,6 @@ def find_phrases_from_text(text, word_sets, min_word_len=3, max_word_len=20, max
             for end in range(start + min_word_len * 2, min(start + max_phrase_len + 1, text_len + 1)):
                 substring = text[start:end]
 
-                # Try splitting the substring into up to max_words_per_phrase words
                 def try_split(pos=0, path=[]):
                     if len(path) > max_words_per_phrase:
                         return
