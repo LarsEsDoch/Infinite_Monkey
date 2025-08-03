@@ -46,8 +46,9 @@ def search_mode():
     save_founds(english_found_words, german_found_words)
 
 def search_mode_custom():
-    print("Searching (English, German)...")
+    print("Loading text. This may take a while...")
     text = load_text()
+    print("Search")
     search_custom_words(text)
 
 def exit_program():

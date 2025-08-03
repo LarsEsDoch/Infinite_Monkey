@@ -2,14 +2,15 @@ from tqdm import tqdm
 
 from src.code.utils.load import load_words
 
-def search_english_german(MIN_WORD_LENGTH, text):
-    english_words, german_words = load_words(MIN_WORD_LENGTH)
+def search_english_german(min_word_length, text):
+    english_words, german_words = load_words(min_word_length)
 
     word_sets = {
         "English": english_words,
         "German": german_words
     }
-    found_words = find_words_in_text(text, MIN_WORD_LENGTH, word_sets, 10)
+    print("\n--- Search words ---")
+    found_words = find_words_in_text(text, min_word_length, word_sets, 10)
     print("\n--- Found words (english) ---")
     for i, w in enumerate(sorted(found_words["English"]), 1):
         print(f"{i:2d}. {w:<20}", end='')
@@ -21,11 +22,11 @@ def search_english_german(MIN_WORD_LENGTH, text):
         if i % 3 == 0:
             print()
 
-    phrases = find_phrases_from_text(text, word_sets)
+    #phrases = find_phrases_from_text(text, word_sets, 3, 20, 30, 4)
 
-    print("\n--- Found Phrases ---")
-    for phrase in sorted(phrases):
-        print(phrase)
+    #print("\n--- Found Phrases ---")
+    #for phrase in sorted(phrases):
+    #    print(phrase)
 
     return sorted(found_words["English"]), sorted(found_words["German"])
 
@@ -35,7 +36,7 @@ def find_words_in_text(text, min_len, word_sets, max_word_len=20):
     text_len = len(text)
     total_iterations = sum(
         max(0, min(max_word_len, text_len - i) - min_len + 1)
-        for i in range(text_len)
+        for i in tqdm(range(text_len), desc="Calculating iterations", unit="checks")
     )
 
     with tqdm(total=total_iterations, desc="Searching words", unit="checks") as pbar:
@@ -52,7 +53,7 @@ def find_words_in_text(text, min_len, word_sets, max_word_len=20):
 def is_valid_word(word, word_sets):
     return any(word in word_set for word_set in word_sets.values())
 
-def find_phrases_from_text(text, word_sets, min_word_len=3, max_word_len=20, max_phrase_len=30, max_words_per_phrase=4):
+def find_phrases_from_text(text, word_sets, min_word_len, max_word_len, max_phrase_len, max_words_per_phrase):
     found_phrases = set()
     text_len = len(text)
 
@@ -89,6 +90,6 @@ def search_custom_words(text):
             if count < 2:
                 print(f"Characters found: {word}")
             else:
-                print(f"Characters found {count} times: {word}")
+                print(f"Characters found {count:,} times: {word}".replace(',', '.'))
         else:
             print(f"Characters not found: {word}")
